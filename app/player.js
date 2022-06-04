@@ -6,13 +6,16 @@ export default class Player {
     this.world = world;
     this.speed = 0.25;
     this.direction = new Vector(0, 0);
+    this.setupInputs();
+  }
+  get ctx() {
+    return this.world.PlayerCanvas.getContext("2d");
+  }
+  setupInputs() {
     input.register("PlayerUp", () => (this.direction.y = -1));
     input.register("PlayerDown", () => (this.direction.y = 1));
     input.register("PlayerRight", () => (this.direction.x = 1));
     input.register("PlayerLeft", () => (this.direction.x = -1));
-  }
-  get ctx() {
-    return this.world.PlayerCanvas.getContext("2d");
   }
   update(delta) {
     this.direction.multiply(this.speed * delta);
