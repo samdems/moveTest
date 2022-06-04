@@ -1,21 +1,25 @@
 import input from "./input.js";
 import Vector from "./vector.js";
+import Direction from "./direction.js";
 export default class Player {
   constructor(world, startingPos) {
     this.pos = startingPos;
     this.world = world;
     this.speed = 0.25;
-    this.direction = new Vector(0, 0);
+    this.direction = new Direction(0, 0, {
+      removeStrafing: true,
+      allowDiagonal: true,
+    });
     this.setupInputs();
   }
   get ctx() {
     return this.world.PlayerCanvas.getContext("2d");
   }
   setupInputs() {
-    input.register("PlayerUp", () => (this.direction.y = -1));
-    input.register("PlayerDown", () => (this.direction.y = 1));
-    input.register("PlayerRight", () => (this.direction.x = 1));
-    input.register("PlayerLeft", () => (this.direction.x = -1));
+    input.register("PlayerUp", () => this.direction.goUp());
+    input.register("PlayerDown", () => this.direction.goDown());
+    input.register("PlayerRight", () => this.direction.goRight());
+    input.register("PlayerLeft", () => this.direction.goLeft());
   }
   update(delta) {
     this.direction.multiply(this.speed * delta);
